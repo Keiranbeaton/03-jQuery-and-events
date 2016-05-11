@@ -35,7 +35,8 @@ articleView.handleAuthorFilter = function() {
       //          Use an "attribute selector" to find those articles that match the value,
       //          and fade them in for the reader.
       $('article').hide();
-      $(this).fadeIn();
+      var authorName = $(this).val();
+      $('article[data-author= "'+ authorName + '"]').fadeIn();
 
     } else {
       // TODO: Otherwise, we should:
@@ -59,7 +60,8 @@ articleView.handleCategoryFilter = function() {
   $('#category-filter').on('change', function() {
     if($(this).val()) {
       $('article').hide();
-      $(this).fadeIn();
+      var categoryName = $(this).val();
+      $('article[data-category="'+ categoryName + '"]').fadeIn();
     } else {
       $('article').show();
       $('.template').hide();
@@ -77,13 +79,18 @@ articleView.handleMainNav = function() {
   //         You may need to dynamically build a selector string (concatenation???)
   //          with the correct ID, based on the data available to you on the .tab
   //          element that was clicked.
-  $('.main-nav').on(/* CODE GOES HERE */);
+  $('.main-nav').on('click', '.tab', function(){
+    $('.tab-content').hide();
+    var authorTab = $(this).attr('data-content');
+    //$('section[id="'+ this.val() + '"]').fadeIn();
+    $('section[id = "' + authorTab + '"]').fadeIn();
+  });
 
   // Let's now trigger a click on the first .tab element, to set up the page:
   $('.main-nav .tab:first').click();
 };
 
-articleView.setTeasers = function() {
+articleView.setTeasers = function(e) {
   // Hide any elements after the first 2 (<p> tags in this case)
   // in any artcile body:
   $('.article-body *:nth-of-type(n+2)').hide();
@@ -96,7 +103,23 @@ articleView.setTeasers = function() {
   //       Ideally, we should attach this as just 1 event handler
   //       on the #articles section, and let it process any .read-on clicks that
   //       happen.
+  $('article').on('click', 'a', function(e){
+    e.preventDefault();
+    var y = $(this).parent();
+    var z = y.children('section');
+    $(z).children().show();
+    // console.log('this teaser', this.parent());
+    $(this).hide();
+
+  });
 };
 
+
 // TODO: Call all of the above functions, once we are sure the DOM is ready.
-$(document).ready(/* complete this callback! */);
+$(document).ready(
+  articleView.populateFilters(),
+  articleView.handleAuthorFilter(),
+  articleView.handleCategoryFilter(),
+  articleView.handleMainNav(),
+  articleView.setTeasers()
+);
