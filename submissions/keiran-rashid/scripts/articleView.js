@@ -34,11 +34,15 @@ articleView.handleAuthorFilter = function() {
       //       2. Fade in only the articles that match based on the author that was selected.
       //          Use an "attribute selector" to find those articles that match the value,
       //          and fade them in for the reader.
+      $('article').hide();
+      $(this).fadeIn();
 
     } else {
       // TODO: Otherwise, we should:
       //       1. Show all the articles,
       //       2. Except the one article we are using as a template.
+      $('article').show();
+      $('.template').hide();
 
     }
     // Reset the category-filter:
@@ -52,7 +56,15 @@ articleView.handleCategoryFilter = function() {
   //       is selected, hide all the articles, then reveal the matches.
   //       When the blank (default) option is selected, show all the articles,
   //       except for the template. Be sure to reset the #author-filter while you are at it!
-
+  $('#category-filter').on('change', function() {
+    if($(this).val()) {
+      $('article').hide();
+      $(this).fadeIn();
+    } else {
+      $('article').show();
+      $('.template').hide();
+    }
+  });
 };
 
 articleView.handleMainNav = function() {
